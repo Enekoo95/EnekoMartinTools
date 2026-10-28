@@ -20,4 +20,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ABCTools|Perlin")
 	static UTexture2D* GeneratePerlinTexture(int32 Width = 256, int32 Height = 256,
 		float Scale = 0.05f, int32 Seed = 0);
+
+	UFUNCTION(BlueprintCallable, Category = "ABCTools|Perlin")
+	static int32 SpawnPerlinCubes(UStaticMesh* CubeMesh, int32 Width = 32, int32 Height = 32,
+		float Scale = 0.05f, int32 Seed = 0, float Threshold = 0.5f, float Spacing = 100.f);
 };

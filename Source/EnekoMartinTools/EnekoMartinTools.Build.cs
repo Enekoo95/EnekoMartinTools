@@ -38,6 +38,8 @@ public class EnekoMartinTools : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+                "UnrealEd",
+				"EditorSubsystem"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
