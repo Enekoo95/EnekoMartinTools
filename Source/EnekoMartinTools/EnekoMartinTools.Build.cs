@@ -24,7 +24,7 @@ public class EnekoMartinTools : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[]
         {
-            "Core", "CoreUObject", "Engine"
+            "Core", "CoreUObject", "Engine", "PCG"
         });
 
 
