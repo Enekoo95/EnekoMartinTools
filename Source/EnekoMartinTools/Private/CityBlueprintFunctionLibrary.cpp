@@ -25,13 +25,12 @@ UPCGComponent* UCityBlueprintFunctionLibrary::FindPCGComponent()
 }
 
 void UCityBlueprintFunctionLibrary::ApplyPCGParameters(
-	int32 Width, int32 Height, double Spacing,
-	double NoiseSize, double Threshold, int32 Seed)
+	FVector GridExtent, FVector CellSize, double NoiseSize, double Threshold, int32 Seed)
 {
 	UPCGComponent* PCG = FindPCGComponent();
 	if (!PCG)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("No se encontro un actor con tag PerlinPCG y PCGComponent"));
+		UE_LOG(LogTemp, Warning, TEXT("No se encontro un actor con tag PerlinPCG"));
 		return;
 	}
 	if (!PCG->GetGraphInstance())
@@ -40,18 +39,24 @@ void UCityBlueprintFunctionLibrary::ApplyPCGParameters(
 		return;
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("Aplicando PCG: W=%d H=%d Spacing=%f"), Width, Height, Spacing);
+	UE_LOG(LogTemp, Log, TEXT("Aplicando PCG: GridExtent=%s CellSize=%s NoiseSize=%f Threshold=%f Seed=%d"),
+		*GridExtent.ToString(), *CellSize.ToString(), NoiseSize, Threshold, Seed);
 
 	UPCGGraphInstance* Graph = PCG->GetGraphInstance();
+	const FTransform NoiseXform(FQuat::Identity, FVector::ZeroVector, FVector(NoiseSize));
 
-	const FTransform NoiseTransform(FQuat::Identity, FVector::ZeroVector, FVector(NoiseSize));
+	auto Check = [](EPropertyBagResult R, const TCHAR* Name)
+		{
+			if (R != EPropertyBagResult::Success)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("No se pudo asignar el parametro %s (nombre o tipo incorrecto)"), Name);
+			}
+		};
 
-	Graph->SetGraphParameter<FVector>(TEXT("GridExtents"), FVector(Width, Height, 0.0) * Spacing * 0.5);
-	Graph->SetGraphParameter<FVector>(TEXT("CellSize"), FVector(Spacing, Spacing, 100.0));
-	Graph->SetGraphParameter<FTransform>(TEXT("NoiseTransform"), NoiseTransform);
-	Graph->SetGraphParameter<double>(TEXT("Threshold"), Threshold);
-
-	PCG->Seed = Seed;
+	Check(Graph->SetGraphParameter<FVector>(TEXT("GridExtents"), GridExtent), TEXT("GridExtents"));
+	Check(Graph->SetGraphParameter<FVector>(TEXT("CellSize"), CellSize), TEXT("CellSize"));
+	Check(Graph->SetGraphParameter<FTransform>(TEXT("NoiseTransform"), NoiseXform), TEXT("NoiseTransform"));
+	Check(Graph->SetGraphParameter<float>(TEXT("Threshold"), static_cast<float>(Threshold)), TEXT("Threshold"));	PCG->Seed = Seed;
 	PCG->GenerateLocal(/*bForce=*/ true);
 
 

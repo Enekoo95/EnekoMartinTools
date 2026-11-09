@@ -14,13 +14,12 @@ class ENEKOMARTINTOOLS_API UCityBlueprintFunctionLibrary : public UBlueprintFunc
 public:
 	UFUNCTION(BlueprintCallable, Category = "City|PCG")
 	static void ApplyPCGParameters(
-		int32 Width = 50,
-		int32 Height = 50,
-		double Spacing = 100.0,
+		FVector GridExtent = FVector(2000,2000,10),
+		FVector CellSize = FVector(200,200, 10),
 		double NoiseSize = 10.0,
 		double Threshold = 0.5,
 		int32 Seed = 0);
 
-private:
+	UFUNCTION(BlueprintCallable, Category = "City|PCG")
 	static UPCGComponent* FindPCGComponent();
 };
