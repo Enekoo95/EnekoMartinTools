@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
+using UnrealBuildTool.Rules;
 
 public class EnekoMartinTools : ModuleRules
 {
@@ -24,7 +25,7 @@ public class EnekoMartinTools : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[]
         {
-            "Core", "CoreUObject", "Engine", "PCG"
+            "Core", "CoreUObject", "Engine", "PCG", "GeometryCore", "GeometryFramework", "PCGGeometryScriptInterop"
         });
 
 
