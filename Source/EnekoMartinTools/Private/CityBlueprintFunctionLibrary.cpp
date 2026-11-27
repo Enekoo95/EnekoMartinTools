@@ -2,13 +2,18 @@
 
 #include "PCGComponent.h"
 #include "PCGGraph.h"
+#if WITH_EDITOR
 #include "Editor.h"
+#endif
 #include "EngineUtils.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 
 UPCGComponent* UCityBlueprintFunctionLibrary::FindPCGComponent()
 {
+#if !WITH_EDITOR
+	return nullptr;
+#else
 	if (!GEditor) { return nullptr; }
 
 	UWorld* World = GEditor->GetEditorWorldContext().World();
@@ -22,11 +27,13 @@ UPCGComponent* UCityBlueprintFunctionLibrary::FindPCGComponent()
 		}
 	}
 	return nullptr;
+#endif
 }
 
 void UCityBlueprintFunctionLibrary::ApplyPCGParameters(
 	FVector GridExtent, FVector CellSize, double NoiseSize, double Threshold, int32 Seed)
 {
+#if WITH_EDITOR
 	UPCGComponent* PCG = FindPCGComponent();
 	if (!PCG)
 	{
@@ -39,7 +46,7 @@ void UCityBlueprintFunctionLibrary::ApplyPCGParameters(
 		return;
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("Aplicando PCG: GridExtent=%s CellSize=%s NoiseSize=%f Threshold=%f Seed=%d"),
+	UE_LOG(LogTemp, Verbose, TEXT("Aplicando PCG: GridExtent=%s CellSize=%s NoiseSize=%f Threshold=%f Seed=%d"),
 		*GridExtent.ToString(), *CellSize.ToString(), NoiseSize, Threshold, Seed);
 
 	UPCGGraphInstance* Graph = PCG->GetGraphInstance();
@@ -58,6 +65,5 @@ void UCityBlueprintFunctionLibrary::ApplyPCGParameters(
 	Check(Graph->SetGraphParameter<FTransform>(TEXT("NoiseTransform"), NoiseXform), TEXT("NoiseTransform"));
 	Check(Graph->SetGraphParameter<float>(TEXT("Threshold"), static_cast<float>(Threshold)), TEXT("Threshold"));	PCG->Seed = Seed;
 	PCG->GenerateLocal(/*bForce=*/ true);
-
-
+#endif
 }

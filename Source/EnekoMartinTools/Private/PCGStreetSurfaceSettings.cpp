@@ -158,7 +158,7 @@ bool FPCGStreetSurfaceElement::ExecuteInternal(FPCGContext* Context) const
 		SidewalkMesh.ReverseOrientation(false);
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("StreetSurfaces: Roads tris=%d center=%s | Sidewalks tris=%d center=%s"),
+	UE_LOG(LogTemp, Verbose, TEXT("StreetSurfaces: Roads tris=%d center=%s | Sidewalks tris=%d center=%s"),
 		RoadMesh.TriangleCount(), *RoadMesh.GetBounds().Center().ToString(),
 		SidewalkMesh.TriangleCount(), *SidewalkMesh.GetBounds().Center().ToString());
 

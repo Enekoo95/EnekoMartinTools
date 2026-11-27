@@ -29,10 +29,7 @@ public class EnekoMartinTools : ModuleRules
         });
 
 
-        PrivateDependencyModuleNames.AddRange(new string[]
-        {
-            "Slate", "SlateCore", "UnrealEd"
-        });
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 
         if (Target.bBuildEditor)
         {
